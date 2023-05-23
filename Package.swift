@@ -5,6 +5,7 @@ let package = Package(
     name: "SwagGen",
     products: [
         .executable(name: "swaggen", targets: ["SwagGen"]),
+        .executable(name: "SwagGenFuzz", targets: ["SwagGenFuzz"]),
         .library(name: "SwagGenKit", targets: ["SwagGenKit"]),
         .library(name: "Swagger", targets: ["Swagger"]),
     ],
@@ -35,6 +36,18 @@ let package = Package(
           "Yams",
           "PathKit",
         ]),
+        .target(name: "SwagGenFuzz",
+            dependencies: ["Swagger"],
+            path: "mayhem",
+            sources: ["main.swift", "FuzzedDataProvider.swift"],
+            swiftSettings: [
+                .unsafeFlags(["-sanitize=fuzzer,address"]),
+                .unsafeFlags(["-parse-as-library"])
+            ],
+            linkerSettings: [
+                .unsafeFlags(["-sanitize=fuzzer,address"])
+            ]
+        ),
         .testTarget(name: "SwagGenKitTests", dependencies: [
           "SwagGenKit",
           "Spectre",

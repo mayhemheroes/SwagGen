@@ -1,0 +1,8 @@
+project: SwagGen
+target: fuzz-SwagGen
+testsuite:
+    - file://mayhem/testsuite
+
+cmds:
+  - cmd: /release/SwagGenFuzz
+    libfuzzer: true
